@@ -1,41 +1,44 @@
 package com.timetable.domain;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Represents a faculty member with assigned lessons, preferences, and teaching constraints.
- */
+@Entity
+@Table(name = "faculty")
+@NoArgsConstructor
 public class Faculty extends User {
-    private List<String> subjects;                // Subjects taught by the faculty
-    private List<TimeSlot> preferredSlots;        // Preferred time slots for teaching
-    private int maxHoursPerDay;                   // Maximum teaching hours per day
-    private boolean isAvailable;                  // Availability status of the faculty
-    private List<Lesson> assignedLessons;         // Lessons assigned to the faculty
 
-    // Constructor to initialize faculty details
+    @ElementCollection
+    @CollectionTable(name = "faculty_subjects", joinColumns = @JoinColumn(name = "faculty_id"))
+    @Column(name = "subject_name")
+    private List<String> subjects = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "faculty_preferred_slots",
+            joinColumns = @JoinColumn(name = "faculty_id"),
+            inverseJoinColumns = @JoinColumn(name = "timeslot_id")
+    )
+    private List<TimeSlot> preferredSlots = new ArrayList<>();
+
+    private int maxHoursPerDay;
+
+    private boolean isAvailable = true;
+
+    // This is the "One" side of the relationship.
+    // 'mappedBy' points to the field name in the Lesson class.
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    private List<Lesson> assignedLessons = new ArrayList<>();
+
     public Faculty(Long id, String name, String email, String password,
                    List<String> subjects, int maxHoursPerDay) {
         super(id, name, email, password);
         this.subjects = subjects;
         this.maxHoursPerDay = maxHoursPerDay;
-        this.isAvailable = true; // Default to available
-        this.assignedLessons = new ArrayList<>(); // Initialize assigned lessons
-        this.preferredSlots = new ArrayList<>(); // Initialize preferred slots
     }
-
-
-    // Getters and Setters
-    public List<String> getSubjects() {
-        return subjects;
-    }
-
-    public List<TimeSlot> getPreferredSlots() {
-        return preferredSlots;
-    }
-
-    public int getMaxHoursPerDay() {
-        return maxHoursPerDay;
-    }
-
 }

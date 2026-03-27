@@ -1,44 +1,57 @@
 package com.timetable.domain;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.lookup.PlanningId;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Logger;
 
 /**
  * Represents a lesson, including its course, batch, faculty, room, and time slot.
  * This is a @PlanningEntity used by OptaPlanner to optimize timetable scheduling.
  */
+@Data
+@NoArgsConstructor
+@Entity
 @PlanningEntity
+@Slf4j
 public class Lesson {
-
-    private static final Logger logger = Logger.getLogger(Lesson.class.getName());
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "lesson_id")
     @PlanningId
     private Long id;
+    @ManyToOne(fetch = FetchType.EAGER)
     private Course course;
+    @ManyToOne(fetch = FetchType.EAGER)
     private StudentBatch studentBatch;
     private String lessonType; // Tracks whether the lesson is a LAB or LECTURE
 
 //    @PlanningVariable(valueRangeProviderRefs = "facultyRange")
-    private Faculty faculty;
+    @ManyToOne
+    @JoinColumn(name = "faculty_id")
+    private Faculty teacher;
 
     @PlanningVariable(valueRangeProviderRefs = "roomRange")
+    @ManyToOne
+    @JoinColumn(name = "room_id")
     private Room room;
 
     @PlanningVariable(valueRangeProviderRefs = "timeSlotRange")
+    @ManyToOne
+    @JoinColumn(name = "timeslot_id")
     private TimeSlot timeSlot;
 
     private TimeSlot minorTimeSlot;
 
-
-    private List<Room> roomList; // List of potential rooms for the lesson
-
-    // Constructors
-    public Lesson() {}
+    @Transient
+    private List<Room> roomList=new ArrayList<>(); // List of potential rooms for the lesson
 
     public Lesson(Long id, Course course, StudentBatch studentBatch, List<Room> roomList) {
         this.id = id;
@@ -55,34 +68,7 @@ public class Lesson {
         this.room = null; // Room will be assigned during planning
     }
 
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
-    public Course getCourse() { return course; }
-    public void setCourse(Course course) { this.course = course; }
-
-    public StudentBatch getStudentBatch() { return studentBatch; }
-    public void setStudentBatch(StudentBatch studentBatch) { this.studentBatch = studentBatch; }
-
-    public String getLessonType() { return lessonType; }
-    public void setLessonType(String lessonType) { this.lessonType = lessonType; }
-
-    public Faculty getFaculty() { return faculty; }
-    public void setFaculty(Faculty faculty) { this.faculty = faculty; }
-
-    public Room getRoom() { return room; }
-    public void setRoom(Room room) {
-        this.room = room;
-    }
-
-    public TimeSlot getTimeSlot() { return timeSlot; }
-    public void setTimeSlot(TimeSlot timeSlot) { this.timeSlot = timeSlot; }
-
-    public TimeSlot getMinorTimeSlot() { return minorTimeSlot; }
-    public void setMinorTimeSlot(TimeSlot timeSlot) { this.minorTimeSlot = minorTimeSlot; }
-
-    public List<Room> getRoomList() { return roomList; }
 
     // Helper method to check if a time slot is suitable for a lab
     private boolean isLabTimeSlot(TimeSlot timeSlot) {
@@ -100,7 +86,7 @@ public class Lesson {
 
     // Checks if the lesson is fully assigned (faculty, room, and time slot are all set)
     public boolean isAssigned() {
-        return faculty != null && room != null && timeSlot != null;
+        return teacher != null && room != null && timeSlot != null;
     }
 
     // Validates if a given faculty member can teach this course
@@ -142,7 +128,7 @@ public class Lesson {
                 "id=" + id +
                 ", course=" + (course != null ? course.getCourseCode() : "null") +
                 ", studentBatch=" + (studentBatch != null ? studentBatch.getBatchName() : "null") +
-                ", faculty=" + (faculty != null ? faculty.getName() : "null") +
+                ", faculty=" + (teacher != null ? teacher.getName() : "null") +
                 ", room=" + (room != null ? room.getRoomNumber() : "null") +
                 ", timeSlot=" + (timeSlot != null ? timeSlot.getDay() + " " + timeSlot.getStartTime() : "null") +
                 '}';

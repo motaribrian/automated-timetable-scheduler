@@ -1,22 +1,35 @@
 package com.timetable.domain;
 
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Represents a course with details such as type, hours, eligible faculty, and associated batches.
  */
+@Entity
+@Table(name = "courses")
 public class Course {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String courseCode;
     private String name;
     private String courseType; // Regular or elective
-    private List<Integer> batchIds; // Batch identifiers
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            name = "timetable_batch_ids", // The name of the new helper table
+            joinColumns = @JoinColumn(name = "timetable_id") // The FK pointing back to Timetable
+    )
+    @Column(name = "batch_id")
+    private List<Integer> batchIds=new ArrayList<>(); // Batch identifiers
     private int lectureHours;
     private int theoryHours;
     private int practicalHours; // Hours for practical sessions
     private int credits;
     private int hoursPerWeek; // Calculated from lecture, theory, and practical hours
-    private List<Faculty> eligibleFaculty; // Faculty eligible to teach the course
+    @ManyToMany
+    private List<Faculty> eligibleFaculty=new ArrayList<>(); // Faculty eligible to teach the course
     private List<Long> lectureRoomIDs; // Specific to minors
     private boolean isMinor;
 
@@ -50,6 +63,10 @@ public class Course {
         this.credits = credits;
         this.eligibleFaculty = eligibleFaculty;
         this.lectureRoomIDs = lectureRoomIDs; // New field for minors
+    }
+
+    public Course() {
+
     }
 
 
