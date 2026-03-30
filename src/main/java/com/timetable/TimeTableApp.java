@@ -160,7 +160,7 @@ public class TimeTableApp {
 
         // Determine which time slot definitions to use based on the batch year
         Object[][] selectedTimeSlotDefinitions;
-        switch (batch.getYear()) {
+        switch (batch.getStudentBatchYear()) {
             case 2021:
                 selectedTimeSlotDefinitions = TIME_SLOT_DEFINITIONS_Year4;
                 break;

@@ -4,6 +4,7 @@ import com.timetable.domain.*;
 import com.timetable.score.TimeTableConstraintProvider;
 import com.timetable.util.CSVDataLoader;
 import com.timetable.util.ConstraintConfigurationHolder;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
@@ -23,12 +24,15 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class TimetableService {
+    @Getter
     private TimeTable currentTimetable;
     private List<Faculty> facultyList;
     private List<Room> roomList;
     private List<Course> courseList;
     private List<StudentBatch> batchList;
+    @Getter
     private SolverConfiguration solverConfiguration = new SolverConfiguration();
+    @Getter
     private TimeSlotConfiguration timeSlotConfiguration;
     
     @PostConstruct
@@ -155,10 +159,6 @@ public class TimetableService {
         }
     }
 
-    public TimeTable getCurrentTimetable() {
-        return currentTimetable;
-    }
-
     public List<Faculty> getFacultyList() {
         return facultyList != null ? facultyList : new ArrayList<>();
     }
@@ -187,11 +187,7 @@ public class TimetableService {
             throw new RuntimeException("Failed to reload data", e);
         }
     }
-    
-    public SolverConfiguration getSolverConfiguration() {
-        return solverConfiguration;
-    }
-    
+
     public void setSolverConfiguration(SolverConfiguration solverConfiguration) {
         if (solverConfiguration == null) {
             throw new IllegalArgumentException("Solver configuration cannot be null");
@@ -199,11 +195,7 @@ public class TimetableService {
         this.solverConfiguration = solverConfiguration;
         log.info("Solver configuration updated: " + solverConfiguration.toString());
     }
-    
-    public TimeSlotConfiguration getTimeSlotConfiguration() {
-        return timeSlotConfiguration;
-    }
-    
+
     public void setTimeSlotConfiguration(TimeSlotConfiguration timeSlotConfiguration) {
         if (timeSlotConfiguration == null) {
             throw new IllegalArgumentException("Time slot configuration cannot be null");

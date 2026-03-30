@@ -321,7 +321,7 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
     private boolean isLunchHourForYear(Lesson lesson) {
         if (lesson.getStudentBatch() == null) return false;
 
-        int year = lesson.getStudentBatch().getYear();
+        int year = lesson.getStudentBatch().getStudentBatchYear();
         LocalTime startTime = lesson.getTimeSlot().getStartTime();
 
         // Use configuration holder to check lunch hours dynamically
@@ -334,7 +334,7 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
         if (batch == null) {
             return null;
         }
-        return batch.getYear();
+        return batch.getStudentBatchYear();
     }
 
     /**
@@ -1021,7 +1021,7 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
             return false;  // Regular batches should not get minor slots
         }
 
-        int batchYear = batch.getYear();
+        int batchYear = batch.getStudentBatchYear();
         LocalTime startTime = slot.getStartTime();
         LocalTime endTime = slot.getEndTime();
         String slotType = slot.getSlotType();

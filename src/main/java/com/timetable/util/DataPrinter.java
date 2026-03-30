@@ -22,7 +22,7 @@ public class DataPrinter {
 
         logger.info("Printing all batches:");
         for (StudentBatch batch : batches) {
-            logger.info("ID: " + batch.getId() + ", Name: " + batch.getBatchName() + ", Year: " + batch.getYear() +
+            logger.info("ID: " + batch.getId() + ", Name: " + batch.getBatchName() + ", Year: " + batch.getStudentBatchYear() +
                     ", Strength: " + batch.getStrength() + ", Courses: " + batch.getCourses() +
                     ", Lecture Rooms: " + batch.getLectureRoomIDs() + ", Practical Rooms: " + batch.getPracticalRoomIDs());
         }

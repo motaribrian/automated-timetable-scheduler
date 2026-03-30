@@ -17,6 +17,7 @@ public class TimeSlot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "timeslot_id")
     private Long id;
+    @Column(name = "day_of_week")
     private String day;
     private LocalTime startTime;
     private LocalTime endTime;

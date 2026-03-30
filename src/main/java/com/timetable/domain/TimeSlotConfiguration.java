@@ -1,5 +1,6 @@
 package com.timetable.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,11 +8,8 @@ import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
-@Setter
-@Getter
+@Data
 public class TimeSlotConfiguration implements Serializable {
-    // Getters and Setters
     private List<TimeSlotDefinition> year1Slots;
     private List<TimeSlotDefinition> year2Slots;
     private List<TimeSlotDefinition> year3Slots;

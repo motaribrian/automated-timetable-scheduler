@@ -394,7 +394,7 @@ public class TimetableController {
         Map<String, Object> map = new HashMap<>();
         map.put("id", batch.getId());
         map.put("batchName", batch.getBatchName());
-        map.put("year", batch.getYear());
+        map.put("year", batch.getStudentBatchYear());
         map.put("section", batch.getBatchName().contains("_") ? batch.getBatchName().split("_")[1] : "A");
         map.put("studentCount", batch.getStrength());
         return map;
@@ -641,7 +641,7 @@ public class TimetableController {
             csv.append(String.format("%d,%s,%d,%s,%d\n",
                     batch.getId(),
                     batch.getBatchName(),
-                    batch.getYear(),
+                    batch.getStudentBatchYear(),
                     "1", // Default semester
                     batch.getStrength()));
         }

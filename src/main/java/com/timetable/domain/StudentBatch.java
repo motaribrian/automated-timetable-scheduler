@@ -16,7 +16,7 @@ public class StudentBatch {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String batchName;
-    private int year;
+    private int studentBatchYear;
     private int strength;
     @ManyToMany
     @JoinTable(name = "studentbatch_course")
@@ -29,10 +29,10 @@ public class StudentBatch {
 
 
     // Constructor
-    public StudentBatch(Long id, String batchName, int year, int strength, List<Course> courses, List<Long> lectureRoomIDs, List<Long> practicalRoomIDs) {
+    public StudentBatch(Long id, String batchName, int studentBatchYear, int strength, List<Course> courses, List<Long> lectureRoomIDs, List<Long> practicalRoomIDs) {
         this.id = id;
         this.batchName = batchName;
-        this.year = year;
+        this.studentBatchYear = studentBatchYear;
         this.strength = strength;
         this.courses = courses != null ? courses : new ArrayList<>();
         this.lectureRoomIDs = lectureRoomIDs != null ? lectureRoomIDs : new ArrayList<>();
