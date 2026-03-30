@@ -1,9 +1,15 @@
 package com.timetable.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.time.LocalTime;
 
+@Setter
+@Getter
 public class TimeSlotDefinition implements Serializable {
+    // Getters and Setters
     private String startTime; // Format: "HH:mm"
     private String endTime;   // Format: "HH:mm"
     private String slotType;  // LECTURE, LAB, MINOR
@@ -22,32 +28,7 @@ public class TimeSlotDefinition implements Serializable {
         this.endTime = endTime.toString();
         this.slotType = slotType;
     }
-    
-    // Getters and Setters
-    public String getStartTime() {
-        return startTime;
-    }
-    
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-    
-    public String getEndTime() {
-        return endTime;
-    }
-    
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-    
-    public String getSlotType() {
-        return slotType;
-    }
-    
-    public void setSlotType(String slotType) {
-        this.slotType = slotType;
-    }
-    
+
     public LocalTime getStartTimeAsLocalTime() {
         return LocalTime.parse(startTime);
     }

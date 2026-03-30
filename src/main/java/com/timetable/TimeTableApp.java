@@ -268,7 +268,7 @@ public class TimeTableApp {
                         lesson.setRoom(lectureRoom);
 
                         Faculty faculty = course.getEligibleFaculty().get(i % course.getEligibleFaculty().size());
-                        lesson.setFaculty(faculty);
+                        lesson.setTeacher(faculty);
 
                         logger.info(String.format("Created LECTURE lesson - Course: %s, Batch: %s, Room: %s, Lesson ID: %d",
                                 course.getCourseCode(),
@@ -291,7 +291,7 @@ public class TimeTableApp {
                         lesson.setRoom(lectureRoom);
 //
                         Faculty faculty = course.getEligibleFaculty().get(i % course.getEligibleFaculty().size());
-                        lesson.setFaculty(faculty);
+                        lesson.setTeacher(faculty);
 
                         logger.info(String.format("Created THEORY lesson - Course: %s, Batch: %s, Room: %s, Lesson ID: %d",
                                 course.getCourseCode(),
@@ -314,7 +314,7 @@ public class TimeTableApp {
                         lesson.setRoom(practicalRoom);
 //
                         Faculty faculty = course.getEligibleFaculty().get(i % course.getEligibleFaculty().size());
-                        lesson.setFaculty(faculty);
+                        lesson.setTeacher(faculty);
 
                         logger.info(String.format("Created LAB lesson - Course: %s, Batch: %s, Room: %s, Lesson ID: %d",
                                 course.getCourseCode(),
@@ -360,7 +360,7 @@ public class TimeTableApp {
 //                    Room minorRoom = minorLectureRooms.get(0);
 //                    Lesson minorLesson = new Lesson(lessonId++, minorCourse, null, roomList);
 //                    minorLesson.setLessonType("MINOR");
-//                    minorLesson.setFaculty(faculty);
+//                    minorLesson.setTeacher(faculty);
 //                    minorLesson.setRoom(minorRoom);
 //                    minorLesson.setTimeSlot(minorTimeSlot);
 //
@@ -384,7 +384,7 @@ public class TimeTableApp {
 //                        minorLesson.setTimeSlot(minorTimeSlot);
 //
                         Faculty faculty = minorCourse.getEligibleFaculty().get(i % minorCourse.getEligibleFaculty().size());
-                        minorLesson.setFaculty(faculty);
+                        minorLesson.setTeacher(faculty);
 
                         logger.info(String.format("Created MINOR lesson - Course: %s, Batch: %s, Room: %s, Lesson ID: %d",
                                 minorCourse.getCourseCode(),
@@ -441,7 +441,7 @@ public class TimeTableApp {
         solution.getLessonList().stream()
                 .filter(lesson -> lesson.getTimeSlot() != null &&
                         lesson.getRoom() != null &&
-                        lesson.getFaculty() != null)
+                        lesson.getTeacher() != null)
                 .sorted(Comparator.comparing((Lesson lesson) -> dayToIndex(lesson.getTimeSlot().getDay()))
                         .thenComparing(lesson -> lesson.getStudentBatch().getBatchName())
                         .thenComparing(lesson -> lesson.getTimeSlot().getStartTime()))
@@ -453,14 +453,14 @@ public class TimeTableApp {
                             lesson.getStudentBatch().getBatchName(),
                             lesson.getCourse().getName(),
                             lesson.getLessonType(),
-                            lesson.getFaculty().getName()
+                            lesson.getTeacher().getName()
                     );
                 });
 
         solution.getMinorLessonList().stream()
                 .filter(lesson -> lesson.getTimeSlot() != null &&
                         lesson.getRoom() != null &&
-                        lesson.getFaculty() != null)
+                        lesson.getTeacher() != null)
                 .sorted(Comparator.comparing((Lesson lesson) -> dayToIndex(lesson.getTimeSlot().getDay()))
                         .thenComparing(lesson -> lesson.getId())
                         .thenComparing(lesson -> lesson.getTimeSlot().getStartTime()))
@@ -472,7 +472,7 @@ public class TimeTableApp {
                             "ALL",
                             lesson.getCourse().getName(),
                             lesson.getLessonType(),
-                            lesson.getFaculty().getName()
+                            lesson.getTeacher().getName()
                     );
                 });
 
@@ -486,7 +486,7 @@ public class TimeTableApp {
             writer.write("Day,Time,Room,Batch,Course,Type,Faculty\n");
 
             solution.getLessonList().stream()
-                    .filter(lesson -> lesson.getTimeSlot() != null && lesson.getRoom() != null && lesson.getFaculty() != null)
+                    .filter(lesson -> lesson.getTimeSlot() != null && lesson.getRoom() != null && lesson.getTeacher() != null)
                     .sorted(Comparator.comparing((Lesson lesson) -> dayToIndex(lesson.getTimeSlot().getDay()))
                             .thenComparing(lesson -> lesson.getStudentBatch().getBatchName())
                             .thenComparing(lesson -> lesson.getTimeSlot().getStartTime()))
@@ -500,14 +500,14 @@ public class TimeTableApp {
                                     lesson.getStudentBatch().getBatchName(),
                                     lesson.getCourse().getName(),
                                     lesson.getLessonType(),
-                                    lesson.getFaculty().getName()));
+                                    lesson.getTeacher().getName()));
                         } catch (IOException e) {
                             logger.log(Level.SEVERE, "Error writing to CSV", e);
                         }
                     });
 
             solution.getMinorLessonList().stream()
-                    .filter(lesson -> lesson.getTimeSlot() != null && lesson.getRoom() != null && lesson.getFaculty() != null)
+                    .filter(lesson -> lesson.getTimeSlot() != null && lesson.getRoom() != null && lesson.getTeacher() != null)
                     .sorted(Comparator.comparing((Lesson lesson) -> dayToIndex(lesson.getTimeSlot().getDay()))
                             .thenComparing(lesson -> lesson.getId())
                             .thenComparing(lesson -> lesson.getTimeSlot().getStartTime()))
@@ -521,7 +521,7 @@ public class TimeTableApp {
                                     "ALL",
                                     lesson.getCourse().getName(),
                                     lesson.getLessonType(),
-                                    lesson.getFaculty().getName()));
+                                    lesson.getTeacher().getName()));
                         } catch (IOException e) {
                             logger.log(Level.SEVERE, "Error writing to CSV", e);
                         }

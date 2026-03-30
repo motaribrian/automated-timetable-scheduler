@@ -28,6 +28,9 @@ diff_output.txt
 # OS files
 .DS_Store
 Thumbs.db
+#database files
+timetable_db.mv.db
+timetable_db.trace.db
 
 # Node.js (handled in frontend/.gitignore but added here for safety)
 node_modules/

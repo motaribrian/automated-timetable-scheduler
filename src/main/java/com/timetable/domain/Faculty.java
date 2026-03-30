@@ -1,5 +1,6 @@
 package com.timetable.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "faculty")
 @NoArgsConstructor
+@Data
 public class Faculty extends User {
 
     @ElementCollection

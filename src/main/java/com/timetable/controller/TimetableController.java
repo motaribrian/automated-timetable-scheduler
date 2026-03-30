@@ -206,7 +206,7 @@ public class TimetableController {
     }
 
     @GetMapping("/faculty")
-    public ResponseEntity<?> getFaculty() {
+    public ResponseEntity<?> getTeacher() {
         try {
             List<Faculty> facultyList = timetableService.getFacultyList();
             List<Map<String, Object>> formattedFaculty = facultyList.stream()
@@ -295,7 +295,7 @@ public class TimetableController {
             }
 
             List<Lesson> facultyLessons = timetable.getLessonList().stream()
-                    .filter(l -> l.getFaculty() != null && l.getFaculty().getId().equals(facultyId))
+                    .filter(l -> l.getTeacher() != null && l.getTeacher().getId().equals(facultyId))
                     .collect(Collectors.toList());
 
             return ResponseEntity.ok(formatLessons(facultyLessons));
@@ -348,15 +348,15 @@ public class TimetableController {
             map.put("batchName", lesson.getStudentBatch().getBatchName());
         }
         
-        if (lesson.getFaculty() != null) {
-            map.put("facultyId", lesson.getFaculty().getId());
-            map.put("facultyName", lesson.getFaculty().getName());
+        if (lesson.getTeacher() != null) {
+            map.put("facultyId", lesson.getTeacher().getId());
+            map.put("facultyName", lesson.getTeacher().getName());
         }
         
         if (lesson.getRoom() != null) {
             map.put("roomId", lesson.getRoom().getId());
             map.put("roomNumber", lesson.getRoom().getRoomNumber());
-            map.put("roomType", lesson.getRoom().getType().toString());
+            map.put("roomType", lesson.getRoom().getRoomType().toString());
         }
         
         if (lesson.getTimeSlot() != null) {
@@ -385,7 +385,7 @@ public class TimetableController {
         map.put("id", room.getId());
         map.put("roomNumber", room.getRoomNumber());
         map.put("capacity", room.getCapacity());
-        map.put("roomType", room.getType().toString());
+        map.put("roomType", room.getRoomType().toString());
         map.put("isAvailable", room.isAvailable());
         return map;
     }
@@ -669,7 +669,7 @@ public class TimetableController {
                     room.getId(),
                     room.getRoomNumber(),
                     room.getCapacity(),
-                    room.getType().toString()));
+                    room.getRoomType().toString()));
         }
         return csv.toString();
     }

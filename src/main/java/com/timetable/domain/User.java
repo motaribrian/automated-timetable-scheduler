@@ -16,7 +16,6 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.ArrayList;
 
-// Base User class
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

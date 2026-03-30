@@ -270,7 +270,7 @@ public class TimetableService {
                         
                         // Assign faculty if eligible
                         if (!course.getEligibleFaculty().isEmpty()) {
-                            lesson.setFaculty(course.getEligibleFaculty().get(0));
+                            lesson.setTeacher(course.getEligibleFaculty().get(0));
                         }
                         
                         lessonList.add(lesson);
@@ -287,7 +287,7 @@ public class TimetableService {
                 lesson.setLessonType("MINOR");
                 
                 if (!minorCourse.getEligibleFaculty().isEmpty()) {
-                    lesson.setFaculty(minorCourse.getEligibleFaculty().get(0));
+                    lesson.setTeacher(minorCourse.getEligibleFaculty().get(0));
                 }
                 
                 minorLessonList.add(lesson);

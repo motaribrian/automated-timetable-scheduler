@@ -1,5 +1,7 @@
 package com.timetable.domain;
 
+import lombok.Data;
+import lombok.Getter;
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ArrayList;
 
+@Data
 @PlanningSolution
 public class TimeTable {
     private Long id;
@@ -65,25 +68,9 @@ public class TimeTable {
     }
 
 
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public List<Lesson> getLessonList() { return lessonList; }
-    public void setLessonList(List<Lesson> lessonList) { this.lessonList = lessonList; }
-    public List<Lesson> getMinorLessonList() { return minorLessonList; }
-    public void setMinorLessonList(List<Lesson> minorLessonList) { this.minorLessonList = minorLessonList; }
-    public List<Faculty> getFacultyList() { return facultyList; }
-    public void setFacultyList(List<Faculty> facultyList) { this.facultyList = facultyList; }
-    public List<Room> getRoomList() { return roomList; }
-    public void setRoomList(List<Room> roomList) { this.roomList = roomList; }
-    public List<TimeSlot> getTimeSlotList() { return timeSlotList; }
-    public void setTimeSlotList(List<TimeSlot> timeSlotList) { this.timeSlotList = timeSlotList; }
-    public List<TimeSlot> getMinorTimeSlotList() { return minorTimeSlotList; }
     public void setMinorTimeSlotList(List<TimeSlot> minorTimeSlotList) {
         this.minorTimeSlotList = minorTimeSlotList != null ? minorTimeSlotList : new ArrayList<>();
     }
-    public HardSoftScore getScore() { return score; }
-    public void setScore(HardSoftScore score) { this.score = score; }
 
 
     // Overriding equals and hashCode to compare TimeTables by id

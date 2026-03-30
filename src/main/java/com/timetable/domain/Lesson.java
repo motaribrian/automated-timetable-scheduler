@@ -48,6 +48,9 @@ public class Lesson {
     @JoinColumn(name = "timeslot_id")
     private TimeSlot timeSlot;
 
+    @PlanningVariable(valueRangeProviderRefs = "minorTimeSlotRange")
+    @ManyToOne
+    @JoinColumn(name = "minortimeslot_id")
     private TimeSlot minorTimeSlot;
 
     @Transient

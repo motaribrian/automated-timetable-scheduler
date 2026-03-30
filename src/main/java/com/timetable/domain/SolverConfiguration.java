@@ -1,8 +1,13 @@
 package com.timetable.domain;
 
-import java.io.Serializable;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.io.Serializable;
+@Data
 public class SolverConfiguration implements Serializable {
+    // Getters and Setters
     private int terminationMinutes = 5;
     private int terminationSeconds = 0;
     private Integer bestScoreLimit = null;
@@ -18,40 +23,7 @@ public class SolverConfiguration implements Serializable {
         this.bestScoreLimit = bestScoreLimit;
         this.unimprovedSecondsLimit = unimprovedSecondsLimit;
     }
-    
-    // Getters and Setters
-    public int getTerminationMinutes() {
-        return terminationMinutes;
-    }
-    
-    public void setTerminationMinutes(int terminationMinutes) {
-        this.terminationMinutes = terminationMinutes;
-    }
-    
-    public int getTerminationSeconds() {
-        return terminationSeconds;
-    }
-    
-    public void setTerminationSeconds(int terminationSeconds) {
-        this.terminationSeconds = terminationSeconds;
-    }
-    
-    public Integer getBestScoreLimit() {
-        return bestScoreLimit;
-    }
-    
-    public void setBestScoreLimit(Integer bestScoreLimit) {
-        this.bestScoreLimit = bestScoreLimit;
-    }
-    
-    public Integer getUnimprovedSecondsLimit() {
-        return unimprovedSecondsLimit;
-    }
-    
-    public void setUnimprovedSecondsLimit(Integer unimprovedSecondsLimit) {
-        this.unimprovedSecondsLimit = unimprovedSecondsLimit;
-    }
-    
+
     public long getTotalTerminationSeconds() {
         return (terminationMinutes * 60L) + terminationSeconds;
     }

@@ -30,6 +30,7 @@ public class Course {
     private int hoursPerWeek; // Calculated from lecture, theory, and practical hours
     @ManyToMany
     private List<Faculty> eligibleFaculty=new ArrayList<>(); // Faculty eligible to teach the course
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<Long> lectureRoomIDs; // Specific to minors
     private boolean isMinor;
 

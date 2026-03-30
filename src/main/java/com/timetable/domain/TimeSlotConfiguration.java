@@ -1,11 +1,17 @@
 package com.timetable.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
+@Getter
 public class TimeSlotConfiguration implements Serializable {
+    // Getters and Setters
     private List<TimeSlotDefinition> year1Slots;
     private List<TimeSlotDefinition> year2Slots;
     private List<TimeSlotDefinition> year3Slots;
@@ -39,132 +45,11 @@ public class TimeSlotConfiguration implements Serializable {
         this.juniorLunchPeriod = new LunchPeriod("13:14", "14:31");
         this.seniorLunchPeriod = new LunchPeriod("12:14", "13:16");
     }
-    
-    // Getters and Setters
-    public List<TimeSlotDefinition> getYear1Slots() {
-        return year1Slots;
-    }
-    
-    public void setYear1Slots(List<TimeSlotDefinition> year1Slots) {
-        this.year1Slots = year1Slots;
-    }
-    
-    public List<TimeSlotDefinition> getYear2Slots() {
-        return year2Slots;
-    }
-    
-    public void setYear2Slots(List<TimeSlotDefinition> year2Slots) {
-        this.year2Slots = year2Slots;
-    }
-    
-    public List<TimeSlotDefinition> getYear3Slots() {
-        return year3Slots;
-    }
-    
-    public void setYear3Slots(List<TimeSlotDefinition> year3Slots) {
-        this.year3Slots = year3Slots;
-    }
-    
-    public List<TimeSlotDefinition> getYear4Slots() {
-        return year4Slots;
-    }
-    
-    public void setYear4Slots(List<TimeSlotDefinition> year4Slots) {
-        this.year4Slots = year4Slots;
-    }
-    
-    public List<TimeSlotDefinition> getMinorSlots() {
-        return minorSlots;
-    }
-    
-    public void setMinorSlots(List<TimeSlotDefinition> minorSlots) {
-        this.minorSlots = minorSlots;
-    }
-    
-    public BatchYearMapping getBatchYearMapping() {
-        return batchYearMapping;
-    }
-    
-    public void setBatchYearMapping(BatchYearMapping batchYearMapping) {
-        this.batchYearMapping = batchYearMapping;
-    }
-
-    public String getPreferredStartTime() {
-        return preferredStartTime;
-    }
-
-    public void setPreferredStartTime(String preferredStartTime) {
-        this.preferredStartTime = preferredStartTime;
-    }
 
     public LocalTime getPreferredStartTimeAsLocalTime() {
         return preferredStartTime != null ? LocalTime.parse(preferredStartTime) : null;
     }
 
-    public int getMaxGapMinutes() {
-        return maxGapMinutes;
-    }
-
-    public void setMaxGapMinutes(int maxGapMinutes) {
-        this.maxGapMinutes = maxGapMinutes;
-    }
-
-    public int getMaxTeacherGapMinutes() {
-        return maxTeacherGapMinutes;
-    }
-
-    public void setMaxTeacherGapMinutes(int maxTeacherGapMinutes) {
-        this.maxTeacherGapMinutes = maxTeacherGapMinutes;
-    }
-
-    public int getConsecutiveLessonBufferMinutes() {
-        return consecutiveLessonBufferMinutes;
-    }
-
-    public void setConsecutiveLessonBufferMinutes(int consecutiveLessonBufferMinutes) {
-        this.consecutiveLessonBufferMinutes = consecutiveLessonBufferMinutes;
-    }
-
-    public int getMinimumBreakBetweenClassesMinutes() {
-        return minimumBreakBetweenClassesMinutes;
-    }
-
-    public void setMinimumBreakBetweenClassesMinutes(int minimumBreakBetweenClassesMinutes) {
-        this.minimumBreakBetweenClassesMinutes = minimumBreakBetweenClassesMinutes;
-    }
-
-    public int getTargetDailyLessonsPerBatch() {
-        return targetDailyLessonsPerBatch;
-    }
-
-    public void setTargetDailyLessonsPerBatch(int targetDailyLessonsPerBatch) {
-        this.targetDailyLessonsPerBatch = targetDailyLessonsPerBatch;
-    }
-
-    public int getAllowedDailyLessonsVariance() {
-        return allowedDailyLessonsVariance;
-    }
-
-    public void setAllowedDailyLessonsVariance(int allowedDailyLessonsVariance) {
-        this.allowedDailyLessonsVariance = allowedDailyLessonsVariance;
-    }
-
-    public LunchPeriod getJuniorLunchPeriod() {
-        return juniorLunchPeriod;
-    }
-
-    public void setJuniorLunchPeriod(LunchPeriod juniorLunchPeriod) {
-        this.juniorLunchPeriod = juniorLunchPeriod;
-    }
-
-    public LunchPeriod getSeniorLunchPeriod() {
-        return seniorLunchPeriod;
-    }
-
-    public void setSeniorLunchPeriod(LunchPeriod seniorLunchPeriod) {
-        this.seniorLunchPeriod = seniorLunchPeriod;
-    }
-    
     /**
      * Get time slots for a specific batch based on its year level mapping.
      * Uses the BatchYearMapping to determine which year's slots to use.
@@ -205,6 +90,8 @@ public class TimeSlotConfiguration implements Serializable {
                 '}';
     }
 
+    @Setter
+    @Getter
     public static class LunchPeriod implements Serializable {
         private String startTime;
         private String endTime;
@@ -214,22 +101,6 @@ public class TimeSlotConfiguration implements Serializable {
 
         public LunchPeriod(String startTime, String endTime) {
             this.startTime = startTime;
-            this.endTime = endTime;
-        }
-
-        public String getStartTime() {
-            return startTime;
-        }
-
-        public void setStartTime(String startTime) {
-            this.startTime = startTime;
-        }
-
-        public String getEndTime() {
-            return endTime;
-        }
-
-        public void setEndTime(String endTime) {
             this.endTime = endTime;
         }
 

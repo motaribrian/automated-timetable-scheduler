@@ -4,10 +4,7 @@ package com.timetable.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 @Entity
@@ -21,8 +18,13 @@ public class StudentBatch {
     private String batchName;
     private int year;
     private int strength;
+    @ManyToMany
+    @JoinTable(name = "studentbatch_course")
+    @Column(name = "course_id")
     private List<Course> courses;
+    @ElementCollection
     private List<Long> lectureRoomIDs;     // field for lecture room IDs
+    @ElementCollection
     private List<Long> practicalRoomIDs;   // field for practical (lab) room IDs
 
 
@@ -37,22 +39,6 @@ public class StudentBatch {
         this.practicalRoomIDs = practicalRoomIDs != null ? practicalRoomIDs : new ArrayList<>();
 
     }
-
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getBatchName() { return batchName; }
-    public void setBatchName(String batchName) { this.batchName = batchName; }
-    public int getYear() { return year; }
-    public void setYear(int year) { this.year = year; }
-    public int getStrength() { return strength; }
-    public void setStrength(int strength) { this.strength = strength; }
-    public List<Course> getCourses() { return courses; }
-    public void setCourses(List<Course> courses) { this.courses = courses; }
-    public List<Long> getLectureRoomIDs() { return lectureRoomIDs; }  // New getter
-    public void setLectureRoomIDs(List<Long> lectureRoomIDs) { this.lectureRoomIDs = lectureRoomIDs; }  // New setter
-    public List<Long> getPracticalRoomIDs() { return practicalRoomIDs; }  // New getter
-    public void setPracticalRoomIDs(List<Long> practicalRoomIDs) { this.practicalRoomIDs = practicalRoomIDs; }  // New setter
 
     public int getRequiredLabsPerWeek() {
         if (courses == null || courses.isEmpty()) {

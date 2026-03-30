@@ -133,9 +133,9 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
      */
     private Constraint teacherConflict(ConstraintFactory factory) {
         return factory.forEachUniquePair(Lesson.class,
-                        Joiners.equal(Lesson::getFaculty),
+                        Joiners.equal(Lesson::getTeacher),
                         Joiners.equal(Lesson::getTimeSlot))
-                .filter((lesson1, lesson2) -> lesson1.getFaculty() != null && lesson1.getTimeSlot() != null)
+                .filter((lesson1, lesson2) -> lesson1.getTeacher() != null && lesson1.getTimeSlot() != null)
                 .penalize(HardSoftScore.ONE_HARD.multiply(CRITICAL_CONFLICT_PENALTY))
                 .asConstraint("Teacher conflict");
     }
@@ -193,9 +193,9 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
      */
     private Constraint teacherQualification(ConstraintFactory factory) {
         return factory.forEach(Lesson.class)
-                .filter(lesson -> lesson.getFaculty() != null &&
+                .filter(lesson -> lesson.getTeacher() != null &&
                         lesson.getCourse() != null &&
-                        !lesson.getCourse().getEligibleFaculty().contains(lesson.getFaculty()))
+                        !lesson.getCourse().getEligibleFaculty().contains(lesson.getTeacher()))
                 .penalize(HardSoftScore.ONE_HARD.multiply(HIGH_PRIORITY_PENALTY))
                 .asConstraint("Teacher qualification");
     }
@@ -392,11 +392,11 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
      */
     private Constraint teacherMaxTwoClassesPerDayForBatch(ConstraintFactory factory) {
         return factory.forEach(Lesson.class)
-                .filter(lesson -> lesson.getFaculty() != null &&
+                .filter(lesson -> lesson.getTeacher() != null &&
                         lesson.getStudentBatch() != null &&
                         lesson.getTimeSlot() != null)
                 .groupBy(
-                        Lesson::getFaculty,
+                        Lesson::getTeacher,
                         Lesson::getStudentBatch,
                         lesson -> lesson.getTimeSlot().getDay(),
                         ConstraintCollectors.count()
@@ -419,7 +419,7 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
      */
     private Constraint teacherIdleGapConstraint(ConstraintFactory factory) {
         return factory.forEachUniquePair(Lesson.class,
-                        Joiners.equal(Lesson::getFaculty),
+                        Joiners.equal(Lesson::getTeacher),
                         Joiners.equal(lesson -> lesson.getTimeSlot() != null ? lesson.getTimeSlot().getDay() : null))
                 .filter(this::validateTeacherGaps)
                 .penalize(HardSoftScore.ONE_SOFT.multiply(SOFT_MEDIUM_PRIORITY),
@@ -452,8 +452,8 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
      */
     private Constraint balanceFacultyLoad(ConstraintFactory factory) {
         return factory.forEach(Lesson.class)
-                .filter(lesson -> lesson.getFaculty() != null)
-                .groupBy(Lesson::getFaculty, ConstraintCollectors.count())
+                .filter(lesson -> lesson.getTeacher() != null)
+                .groupBy(Lesson::getTeacher, ConstraintCollectors.count())
                 .filter((faculty, count) -> Math.abs(count - TARGET_FACULTY_LESSONS) > 2)
                 .penalize(HardSoftScore.ONE_SOFT.multiply(SOFT_HIGH_PRIORITY),
                         (faculty, count) -> Math.abs(count - TARGET_FACULTY_LESSONS))
@@ -480,7 +480,7 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
 //    // Preference and Convenience Soft Constraints
 //    private Constraint teacherPreferredTimeslot(ConstraintFactory factory) {
 //        return factory.forEach(Lesson.class)
-//                .filter(lesson -> !lesson.getFaculty().getPreferredSlots().contains(lesson.getTimeSlot()))
+//                .filter(lesson -> !lesson.getTeacher().getPreferredSlots().contains(lesson.getTimeSlot()))
 //                .penalize(HardSoftScore.ONE_SOFT)
 //                .asConstraint("Teacher preferred timeslot");
 //    }
@@ -489,7 +489,7 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
 //        return factory.forEach(Lesson.class)
 //                .filter(lesson -> {
 //                    // Null safety checks
-//                    Faculty faculty = lesson.getFaculty();
+//                    Faculty faculty = lesson.getTeacher();
 //                    TimeSlot timeSlot = lesson.getTimeSlot();
 //                    if (faculty == null || timeSlot == null) return false;
 //
@@ -671,8 +671,8 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
         if (room == null) {
             return false;
         }
-        return room.getType() == RoomType.COMPUTER_LAB ||
-                room.getType() == RoomType.HARDWARE_LAB;
+        return room.getRoomType() == RoomType.COMPUTER_LAB ||
+                room.getRoomType() == RoomType.HARDWARE_LAB;
     }
 
     private boolean isConsecutive(Lesson lesson1, Lesson lesson2) {
@@ -800,11 +800,11 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
      */
     private Constraint facultyTimeConflictConstraint(ConstraintFactory factory) {
         return factory.forEachUniquePair(Lesson.class,
-                        Joiners.equal(Lesson::getFaculty),
+                        Joiners.equal(Lesson::getTeacher),
                         Joiners.equal(l -> l.getTimeSlot() != null ? l.getTimeSlot().getDay() : null))
                 .filter((lesson1, lesson2) -> {
                     // Comprehensive null checks
-                    if (lesson1.getFaculty() == null || lesson2.getFaculty() == null ||
+                    if (lesson1.getTeacher() == null || lesson2.getTeacher() == null ||
                             lesson1.getTimeSlot() == null || lesson2.getTimeSlot() == null) {
                         return false;
                     }
@@ -823,14 +823,14 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
      */
     private Constraint facultyMultiBatchConstraint(ConstraintFactory factory) {
         return factory.forEachUniquePair(Lesson.class,
-                        Joiners.equal(Lesson::getFaculty),
+                        Joiners.equal(Lesson::getTeacher),
                         Joiners.equal(Lesson::getTimeSlot))
                 .filter((lesson1, lesson2) -> {
                     // Consolidated null and conflict checks
                     return lesson1.getStudentBatch() != null &&
                             lesson2.getStudentBatch() != null &&
-                            lesson1.getFaculty() != null &&
-                            lesson2.getFaculty() != null &&
+                            lesson1.getTeacher() != null &&
+                            lesson2.getTeacher() != null &&
                             lesson1.getTimeSlot() != null &&
                             !lesson1.equals(lesson2) &&
                             !lesson1.getStudentBatch().equals(lesson2.getStudentBatch());
@@ -1074,13 +1074,13 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
         if (lesson1 == null || lesson2 == null) {
             return false;
         }
-        if (lesson1.getFaculty() == null || lesson2.getFaculty() == null) {
+        if (lesson1.getTeacher() == null || lesson2.getTeacher() == null) {
             return false;
         }
         if (lesson1.getTimeSlot() == null || lesson2.getTimeSlot() == null) {
             return false;
         }
-        if (!lesson1.getFaculty().equals(lesson2.getFaculty())) {
+        if (!lesson1.getTeacher().equals(lesson2.getTeacher())) {
             return false;
         }
         if (!isSameDay(lesson1, lesson2)) {

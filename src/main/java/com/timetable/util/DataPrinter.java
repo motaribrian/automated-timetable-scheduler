@@ -69,7 +69,7 @@ public class DataPrinter {
         logger.info("Printing all rooms:");
         for (Room room : rooms) {
             logger.info("ID: " + room.getId() + ", Room Number: " + room.getRoomNumber() + ", Capacity: " + room.getCapacity() +
-                    ", Type: " + room.getType());
+                    ", Type: " + room.getRoomType());
         }
     }
 }
