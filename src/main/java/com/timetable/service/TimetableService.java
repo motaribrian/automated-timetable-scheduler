@@ -4,6 +4,7 @@ import com.timetable.domain.*;
 import com.timetable.score.TimeTableConstraintProvider;
 import com.timetable.util.CSVDataLoader;
 import com.timetable.util.ConstraintConfigurationHolder;
+import lombok.extern.slf4j.Slf4j;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
 import org.optaplanner.core.config.solver.SolverConfig;
@@ -20,8 +21,8 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class TimetableService {
-    private static final Logger logger = Logger.getLogger(TimetableService.class.getName());
     private TimeTable currentTimetable;
     private List<Faculty> facultyList;
     private List<Room> roomList;
@@ -32,15 +33,16 @@ public class TimetableService {
     
     @PostConstruct
     public void init() {
-        logger.info("Initializing TimetableService and loading CSV data...");
+        log.info("Initializing TimetableService and loading CSV data...");
         try {
             initializeDefaultTimeSlotConfiguration();
             // Set configuration in the holder so ConstraintProvider can access it
             ConstraintConfigurationHolder.getInstance().setTimeSlotConfiguration(timeSlotConfiguration);
             reloadData();
-            logger.info("CSV data loaded successfully on startup");
+            log.info("CSV data loaded successfully on startup");
         } catch (Exception e) {
-            logger.log(Level.WARNING, "Could not load CSV data on startup", e);
+            log.warn("Could not load CSV data on startup", e);
+
         }
     }
     
@@ -89,7 +91,7 @@ public class TimetableService {
         timeSlotConfiguration.getMinorSlots().add(new TimeSlotDefinition("08:00", "09:00", "MINOR"));
         timeSlotConfiguration.getMinorSlots().add(new TimeSlotDefinition("18:00", "19:30", "MINOR"));
         
-        logger.info("Default time slot configuration initialized with batch-year mappings: " + 
+        log.info("Default time slot configuration initialized with batch-year mappings: " + 
                     timeSlotConfiguration.getBatchYearMapping().toString());
     }
 
@@ -125,7 +127,7 @@ public class TimetableService {
             // Add optional termination conditions if configured
             if (solverConfiguration.getBestScoreLimit() != null) {
                 // Note: Best score termination requires OptaPlanner Pro
-                logger.info("Best score limit set to: " + solverConfiguration.getBestScoreLimit());
+                log.info("Best score limit set to: " + solverConfiguration.getBestScoreLimit());
             }
             
             if (solverConfiguration.getUnimprovedSecondsLimit() != null) {
@@ -134,21 +136,21 @@ public class TimetableService {
                 );
             }
             
-            logger.info("Solver configuration: " + solverConfiguration.toString());
+            log.info("Solver configuration: " + solverConfiguration.toString());
 
             // Solve timetable
             SolverFactory<TimeTable> solverFactory = SolverFactory.create(solverConfig);
             Solver<TimeTable> solver = solverFactory.buildSolver();
 
-            logger.info("Starting solver...");
+            log.info("Starting solver...");
             TimeTable solution = solver.solve(problem);
-            logger.info("Solver finished. Score: " + solution.getScore());
+            log.info("Solver finished. Score: " + solution.getScore());
 
             currentTimetable = solution;
             return solution;
 
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error generating timetable", e);
+            log.error("Error generating timetable", e);
             throw new RuntimeException("Failed to generate timetable", e);
         }
     }
@@ -179,9 +181,9 @@ public class TimetableService {
             roomList = CSVDataLoader.loadRooms("rooms.csv");
             courseList = CSVDataLoader.loadCourses("courses.csv", facultyList);
             batchList = CSVDataLoader.loadStudentBatches("batches.csv", courseList);
-            logger.info("Data reloaded successfully");
+            log.info("Data reloaded successfully");
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error reloading data", e);
+            log.error("Error reloading data", e);
             throw new RuntimeException("Failed to reload data", e);
         }
     }
@@ -195,7 +197,7 @@ public class TimetableService {
             throw new IllegalArgumentException("Solver configuration cannot be null");
         }
         this.solverConfiguration = solverConfiguration;
-        logger.info("Solver configuration updated: " + solverConfiguration.toString());
+        log.info("Solver configuration updated: " + solverConfiguration.toString());
     }
     
     public TimeSlotConfiguration getTimeSlotConfiguration() {
@@ -209,7 +211,7 @@ public class TimetableService {
         this.timeSlotConfiguration = timeSlotConfiguration;
         // Update the holder so ConstraintProvider has access to the latest configuration
         ConstraintConfigurationHolder.getInstance().setTimeSlotConfiguration(timeSlotConfiguration);
-        logger.info("Time slot configuration updated: " + timeSlotConfiguration.toString());
+        log.info("Time slot configuration updated: " + timeSlotConfiguration.toString());
     }
 
     // Helper methods

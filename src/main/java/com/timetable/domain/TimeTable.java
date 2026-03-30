@@ -24,9 +24,9 @@ public class TimeTable {
     private List<Lesson> lessonList;
 
     @PlanningEntityCollectionProperty
-    private List<Lesson> minorLessonList; // New list for minor lessons
+    private List<Lesson> minorLessonList;
 
-    @ValueRangeProvider(id = "facultyRange")
+    @ValueRangeProvider(id = "teacherRange")
     @ProblemFactCollectionProperty
     private List<Faculty> facultyList;
 

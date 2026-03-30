@@ -33,7 +33,7 @@ public class Lesson {
     private StudentBatch studentBatch;
     private String lessonType; // Tracks whether the lesson is a LAB or LECTURE
 
-//    @PlanningVariable(valueRangeProviderRefs = "facultyRange")
+    @PlanningVariable(valueRangeProviderRefs = "teacherRange")
     @ManyToOne
     @JoinColumn(name = "faculty_id")
     private Faculty teacher;
