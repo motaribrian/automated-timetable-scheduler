@@ -1,5 +1,6 @@
 package com.timetable.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,9 +15,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Configuration
+@Slf4j
 public class CorsConfig {
 
-    private static final Logger log = LoggerFactory.getLogger(CorsConfig.class);
 
     @Value("${cors.allowed-origins:http://localhost:3000}")
     private String allowedOrigins;

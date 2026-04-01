@@ -31,6 +31,9 @@ Thumbs.db
 #database files
 timetable_db.mv.db
 timetable_db.trace.db
+*.db
+timetable_demo_db.mv.db
+timetable_demo_db.trace.db
 
 # Node.js (handled in frontend/.gitignore but added here for safety)
 node_modules/
@@ -47,7 +50,7 @@ yarn-error.log*
 CSV_MANAGER_PREVIEW.html
 
 # Resources folder (screenshots and duplicates)
-resources/
+
 
 # Screenshots and images
 screenshots/
